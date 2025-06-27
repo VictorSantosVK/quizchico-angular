@@ -1,0 +1,328 @@
+<div class="admin-container">
+  <!-- Header -->
+  <header class="admin-header">
+    <div class="container">
+      <h1>
+        <i class="fas fa-tachometer-alt"></i> Painel de Administração Quiz Chico
+      </h1>
+      <a routerLink="/login" class="logout-btn" (click)="logout()">
+        <i class="fas fa-sign-out-alt"></i> Sair
+      </a>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="container">
+    <div class="admin-content">
+      <!-- Sidebar -->
+      <aside class="admin-sidebar">
+        <h3>Menu</h3>
+        <ul class="sidebar-menu">
+          <li>
+            <a
+              [class.active]="activeSection === 'quizzes'"
+              (click)="showQuizzesSection()"
+            >
+              <i class="fas fa-home"></i> Dashboard
+            </a>
+          </li>
+          <li>
+            <a
+              [class.active]="activeSection === 'users'"
+              (click)="showUsersSection()"
+            >
+              <i class="fas fa-users"></i> Usuários
+            </a>
+          </li>
+        </ul>
+      </aside>
+
+      <!-- Main Panel -->
+      <main class="admin-panel">
+        <!-- Quizzes Section -->
+        <section id="quizzesSection" *ngIf="activeSection === 'quizzes'">
+          <div class="panel-header">
+            <h2><i class="fas fa-question-circle"></i> Gerenciar Quizzes</h2>
+            <button class="add-quiz-btn" (click)="openAddQuizModal()">
+              <i class="fas fa-plus"></i> Adicionar Quiz
+            </button>
+          </div>
+          <div class="table-responsive">
+            <table class="quiz-table">
+              <thead>
+                <tr>
+                  <th>Título</th>
+                  <th>Categoria</th>
+                  <th>Questões</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let quiz of quizzes">
+                  <td>{{ quiz.title }}</td>
+                  <td>{{ quiz.category }}</td>
+                  <td>{{ quiz.questions.length }}</td>
+                  <td class="actions">
+                    <button class="btn-edit" (click)="openEditQuizModal(quiz)">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn-delete" (click)="deleteQuiz(quiz.id)">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+                <tr *ngIf="quizzes.length === 0">
+                  <td colspan="4" class="text-center">
+                    Nenhum quiz cadastrado
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Users Section -->
+        <section id="usersSection" *ngIf="activeSection === 'users'">
+          <div class="panel-header">
+            <h2><i class="fas fa-users"></i> Usuários</h2>
+          </div>
+          <div class="table-responsive">
+            <table class="quiz-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nome</th>
+                  <th>Email</th>
+                  <th>Perfil</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let user of users">
+                  <td>{{ user.id }}</td>
+                  <td>{{ user.name }}</td>
+                  <td>{{ user.email }}</td>
+                  <td>{{ user.profile }}</td>
+                </tr>
+                <tr *ngIf="users.length === 0">
+                  <td colspan="4" class="text-center">
+                    Nenhum usuário cadastrado
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- Modal para Criar/Editar Quiz -->
+  <div class="quiz-modal" [class.show]="showModal">
+    <div class="quiz-modal-content">
+      <div class="quiz-modal-header">
+        <h3 class="quiz-modal-title">
+          {{ isEditing ? 'Editar Quiz' : 'Adicionar Novo Quiz' }}
+        </h3>
+        <button class="close-modal" (click)="closeModal()">&times;</button>
+      </div>
+      <form (ngSubmit)="submitQuiz()" #quizForm="ngForm">
+        <input type="hidden" [(ngModel)]="newQuiz.id" name="quizId" />
+
+        <div class="mb-3">
+          <label for="quizTitle" class="form-label">Título</label>
+          <input
+            type="text"
+            class="form-control"
+            id="quizTitle"
+            [(ngModel)]="newQuiz.title"
+            name="quizTitle"
+            required
+          />
+        </div>
+
+        <div class="mb-3">
+          <label for="quizCategory" class="form-label">Categoria</label>
+          <input
+            type="text"
+            class="form-control"
+            id="quizCategory"
+            [(ngModel)]="newQuiz.category"
+            name="quizCategory"
+            required
+          />
+        </div>
+
+        <div class="mb-3">
+          <label for="quizDescription" class="form-label">Descrição</label>
+          <textarea
+            class="form-control"
+            id="quizDescription"
+            rows="3"
+            [(ngModel)]="newQuiz.description"
+            name="quizDescription"
+          ></textarea>
+        </div>
+
+        <!-- Seção de Perguntas -->
+        <div class="questions-section">
+          <h4>Perguntas</h4>
+          <button
+            type="button"
+            class="btn btn-sm btn-add-question"
+            (click)="addNewQuestion()"
+          >
+            <i class="fas fa-plus"></i> Adicionar Pergunta
+          </button>
+
+          <div class="question-list">
+            <div
+              class="question-item"
+              *ngFor="let question of newQuiz.questions; let i = index"
+            >
+              <div class="question-header">
+                <h5>Pergunta {{i + 1}}</h5>
+                <button
+                  type="button"
+                  class="btn btn-sm btn-danger"
+                  (click)="removeQuestion(i)"
+                >
+                  <i class="fas fa-trash"></i> Remover
+                </button>
+              </div>
+
+              <div class="mb-3">
+                <label [for]="'questionText'+i" class="form-label"
+                  >Texto da Pergunta</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  [id]="'questionText'+i"
+                  [(ngModel)]="question.text"
+                  [name]="'questionText'+i"
+                  required
+                />
+              </div>
+
+              <div class="mb-3">
+                <label [for]="'questionType'+i" class="form-label"
+                  >Tipo de Resposta</label
+                >
+                <select
+                  class="form-control"
+                  [id]="'questionType'+i"
+                  [(ngModel)]="question.type"
+                  [name]="'questionType'+i"
+                  required
+                  (change)="onQuestionTypeChange(question)"
+                >
+                  <option value="multiple">Múltipla escolha</option>
+                  <option value="boolean">Verdadeiro/Falso</option>
+                  <option value="text">Resposta textual</option>
+                </select>
+              </div>
+
+              <!-- Opções para perguntas de múltipla escolha -->
+              <div class="options-section" *ngIf="question.type === 'multiple'">
+                <label class="form-label">Opções de Resposta</label>
+                <div
+                  class="option-item"
+                  *ngFor="let option of question.options; let j = index"
+                >
+                  <div class="option-row">
+                    <input
+                      type="text"
+                      class="form-control option-input"
+                      [(ngModel)]="option.text"
+                      [name]="'optionText'+i+'-'+j"
+                      required
+                    />
+                    <div class="option-actions">
+                      <label class="correct-option-label">
+                        <input
+                          type="radio"
+                          [name]="'correctOption'+i"
+                          [(ngModel)]="question.correctOption"
+                          [value]="j"
+                          required
+                        />
+                        Correta
+                      </label>
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-remove-option"
+                        (click)="removeOption(i, j)"
+                        *ngIf="question.options.length > 1"
+                      >
+                        <i class="fas fa-times"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  class="btn btn-sm btn-add-option"
+                  (click)="addOption(i)"
+                >
+                  <i class="fas fa-plus"></i> Adicionar Opção
+                </button>
+              </div>
+
+              <!-- Opção para perguntas verdadeiro/falso -->
+              <div class="mb-3" *ngIf="question.type === 'boolean'">
+                <label class="form-label">Resposta Correta</label>
+                <div>
+                  <label class="radio-inline">
+                    <input
+                      type="radio"
+                      [name]="'correctBoolean'+i"
+                      [(ngModel)]="question.correctAnswer"
+                      [value]="true"
+                      required
+                    />
+                    Verdadeiro
+                  </label>
+                  <label class="radio-inline">
+                    <input
+                      type="radio"
+                      [name]="'correctBoolean'+i"
+                      [(ngModel)]="question.correctAnswer"
+                      [value]="false"
+                    />
+                    Falso
+                  </label>
+                </div>
+              </div>
+
+              <!-- Campo para resposta textual -->
+              <div class="mb-3" *ngIf="question.type === 'text'">
+                <label [for]="'correctTextAnswer'+i" class="form-label"
+                  >Resposta Correta</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  [id]="'correctTextAnswer'+i"
+                  [(ngModel)]="question.correctAnswer"
+                  [name]="'correctTextAnswer'+i"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="closeModal()"
+          >
+            Cancelar
+          </button>
+          <button type="submit" class="btn btn-primary">Salvar Quiz</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

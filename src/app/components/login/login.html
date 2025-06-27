@@ -1,0 +1,136 @@
+<div class="login-wrapper">
+  <div
+    class="container"
+    [class.sign-in-js]="isLoginVisible"
+    [class.sign-up-js]="!isLoginVisible"
+  >
+    <!-- Login Content -->
+    <div class="content first-content">
+      <div class="first-column">
+        <h2 class="title title-primary">Olá, amigo!</h2>
+        <p class="description description-primary">
+          Insira seus dados pessoais
+        </p>
+        <p class="description description-primary">
+          e comece sua jornada conosco
+        </p>
+        <button (click)="toggleView(true)" class="btn btn-primary">
+          Cadastrar
+        </button>
+      </div>
+      <div class="second-column">
+        <h2 class="title title-second">Faça login no Quiz Chico</h2>
+
+        <p class="description description-second">
+          ou use sua conta de e-mail:
+        </p>
+        <form class="form" (ngSubmit)="onLoginSubmit()" #loginForm="ngForm">
+          <label class="label-input" for="loginEmail">
+            <i class="far fa-envelope icon-modify"></i>
+            <input
+              type="email"
+              id="loginEmail"
+              placeholder="E-mail"
+              name="email"
+              [(ngModel)]="loginData.email"
+              required
+            />
+          </label>
+
+          <label class="label-input" for="loginSenha">
+            <i class="fas fa-lock icon-modify"></i>
+            <input
+              type="password"
+              id="loginSenha"
+              placeholder="Senha"
+              name="password"
+              [(ngModel)]="loginData.password"
+              required
+            />
+          </label>
+
+          <button type="submit" class="btn btn-second">Entrar</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Signup Content -->
+    <div class="content second-content">
+      <div class="first-column">
+        <h2 class="title title-primary">Bem-Vindo de Volta!!</h2>
+        <p class="description description-primary">
+          Para continuar conectado conosco
+        </p>
+        <p class="description description-primary">
+          faça login com suas informações pessoais
+        </p>
+        <button (click)="toggleView(false)" class="btn btn-primary">
+          Login
+        </button>
+      </div>
+      <div class="second-column">
+        <h2 class="title title-second">Criar conta no Quiz Chico</h2>
+
+        <p class="description description-second">
+          ou use seu e-mail para se cadastrar:
+        </p>
+        <form
+          class="form"
+          (ngSubmit)="onRegisterSubmit()"
+          #registerForm="ngForm"
+        >
+          <label class="label-input" for="nome">
+            <i class="far fa-user icon-modify"></i>
+            <input
+              type="text"
+              id="nome"
+              placeholder="Nome"
+              name="name"
+              [(ngModel)]="registerData.name"
+              required
+            />
+          </label>
+
+          <label class="label-input" for="email">
+            <i class="far fa-envelope icon-modify"></i>
+            <input
+              type="email"
+              id="email"
+              placeholder="E-mail"
+              name="email"
+              [(ngModel)]="registerData.email"
+              required
+            />
+          </label>
+
+          <label class="label-input" for="senha">
+            <i class="fas fa-lock icon-modify"></i>
+            <input
+              type="password"
+              id="senha"
+              placeholder="Senha"
+              name="password"
+              [(ngModel)]="registerData.password"
+              required
+              minlength="6"
+            />
+          </label>
+
+          <label class="label-input" for="confirmarSenha">
+            <i class="fas fa-lock icon-modify"></i>
+            <input
+              type="password"
+              id="confirmarSenha"
+              placeholder="Confirmar senha"
+              name="confirmPassword"
+              [(ngModel)]="registerData.confirmPassword"
+              required
+            />
+          </label>
+
+          <button type="submit" class="btn btn-second">Cadastrar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,429 @@
+@import url('https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css');
+@import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css');
+
+/* --- Cores Atualizadas --- */
+:root {
+  --purple-primary: #761DB1;
+  --purple-dark: #5c158e;
+  --purple-light: #f0e6f9;
+  --purple-lighter: #f9f5fd;
+  
+  --gold: #FFD700;
+  --gold-light: #fff5cc;
+  --silver: #C0C0C0;
+  --silver-light: #f2f2f2;
+  --bronze: #CD7F32;
+  --bronze-light: #f8e9d9;
+  
+  --green-success: #28a745;
+  --blue-info: #17a2b8;
+  --red-danger: #dc3545;
+  --yellow-warning: #ffc107;
+  
+  --gray-light: #f7f7f7;
+  --gray-medium: #e0e0e0;
+  --gray-dark: #333;
+  --white: #ffffff;
+}
+
+/* --- Cores de Texto --- */
+.text-purple { color: var(--purple-primary) !important; }
+.text-gold { color: var(--gold) !important; }
+.text-silver { color: var(--silver) !important; }
+.text-bronze { color: var(--bronze) !important; }
+
+/* --- Cores de Fundo --- */
+.bg-purple { background-color: var(--purple-primary) !important; color: white !important; }
+.bg-gold { background-color: var(--gold-light) !important; }
+.bg-silver { background-color: var(--silver-light) !important; }
+.bg-bronze { background-color: var(--bronze-light) !important; }
+.bg-purple-light { background-color: var(--purple-light) !important; }
+
+/* --- Geral --- */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: var(--purple-lighter);
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
+  color: var(--gray-dark);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* --- Header Admin --- */
+.admin-header {
+  background-color: var(--purple-primary);
+  color: var(--white);
+  padding: 1rem 0;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+/* --- Caixa de Pesquisa --- */
+.search-box {
+  position: relative;
+  width: 100%;
+  max-width: 300px;
+}
+
+.search-box i {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--purple-primary);
+  z-index: 2;
+}
+
+.search-box input {
+  padding: 0.5rem 1rem 0.5rem 2.5rem;
+  border-radius: 50px;
+  border: 1px solid var(--gray-medium);
+  width: 100%;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.search-box input:focus {
+  outline: none;
+  border-color: var(--purple-primary);
+  box-shadow: 0 0 0 3px rgba(118, 29, 177, 0.1);
+}
+
+/* --- Cards de Quiz --- */
+.quiz-card {
+  transition: all 0.3s ease;
+  border: none;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  background-color: var(--white);
+  height: 100%;
+}
+
+.quiz-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(118, 29, 177, 0.15);
+}
+
+.quiz-title {
+  color: var(--purple-primary);
+  font-weight: bold;
+  margin-bottom: 0.75rem;
+}
+
+/* --- Botões --- */
+.btn-purple {
+  background-color: var(--purple-primary);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 0.5rem 1.25rem;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.btn-purple:hover {
+  background-color: var(--purple-dark);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(118, 29, 177, 0.2);
+}
+
+/* --- Badges --- */
+.badge.bg-purple {
+  background-color: var(--purple-primary);
+  padding: 0.25rem 0.75rem;
+  border-radius: 50px;
+  font-weight: 500;
+}
+
+/* --- Animações --- */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+/* --- Container do Ranking --- */
+.ranking-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: var(--white);
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(118, 29, 177, 0.1);
+  border: 1px solid var(--gray-medium);
+}
+
+/* --- Cabeçalho do Ranking --- */
+.ranking-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  position: relative;
+  padding-bottom: 1rem;
+}
+
+.ranking-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(to right, var(--purple-primary), var(--purple-dark));
+  border-radius: 2px;
+}
+
+.page-title {
+  color: var(--purple-primary);
+  font-size: 2.25rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.page-title i {
+  margin-right: 0.75rem;
+  font-size: 2rem;
+  color: var(--gold);
+}
+
+.ranking-description {
+  color: var(--gray-dark);
+  font-size: 1.1rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.conteudo-destaques{
+  margin-top: 20px;
+}
+
+/* --- Informações do Usuário --- */
+.user-ranking-info {
+  display: flex;
+  justify-content: space-between;
+  background: linear-gradient(135deg, var(--purple-light) 0%, var(--purple-lighter) 100%);
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+  border-left: 4px solid var(--purple-primary);
+}
+
+.user-ranking-info-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.position-user {
+  font-weight: 600;
+  color: var(--purple-primary);
+  font-size: 1.1rem;
+}
+.user-ranking-info .badge {
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* --- Lista de Ranking --- */
+.ranking-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.ranking-item {
+  display: flex;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  margin-bottom: 0.75rem;
+  background-color: var(--white);
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  border: 1px solid var(--gray-medium);
+}
+
+.ranking-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(118, 29, 177, 0.15);
+}
+
+/* --- Posições --- */
+.position {
+  width: 50px;
+  font-size: 1.25rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.position.medal-gold {
+  color: var(--gold);
+  text-shadow: 0 1px 3px rgba(255, 215, 0, 0.3);
+}
+
+.position.medal-silver {
+  color: var(--silver);
+  text-shadow: 0 1px 3px rgba(192, 192, 192, 0.3);
+}
+
+.position.medal-bronze {
+  color: var(--bronze);
+  text-shadow: 0 1px 3px rgba(205, 127, 50, 0.3);
+}
+
+/* --- Usuário Atual --- */
+.ranking-item.user-you {
+  background: linear-gradient(135deg, var(--purple-lighter) 0%, var(--white) 100%);
+  border-left: 4px solid var(--purple-primary);
+  box-shadow: 0 5px 15px rgba(118, 29, 177, 0.15);
+  position: relative;
+}
+
+.ranking-item.user-you::before {
+  content: 'Você';
+  position: absolute;
+  top: -10px;
+  right: 20px;
+  background-color: var(--purple-primary);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* --- Informações do Usuário --- */
+.user-info {
+  flex-grow: 1;
+  padding: 0 1rem;
+  font-weight: 500;
+  color: var(--gray-dark);
+}
+
+.ranking-item.user-you .user-info {
+  color: var(--purple-dark);
+  font-weight: 600;
+}
+
+/* --- Pontuação --- */
+.user-score, #user-score {
+  font-weight: 700;
+  min-width: 80px;
+  text-align: right;
+  font-size: 1.1rem;
+  color: var(--purple-primary);
+}
+
+.ranking-item.user-you .user-score {
+  color: var(--purple-dark);
+}
+
+/* --- Responsividade --- */
+@media (max-width: 992px) {
+  .admin-header {
+    padding: 0.75rem 0;
+  }
+  
+  .quiz-card {
+    margin-bottom: 1.5rem;
+  }
+  
+  .ranking-container {
+    padding: 1.5rem;
+  }
+  
+  .page-title {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 15px;
+  }
+  
+  .search-box {
+    max-width: 100%;
+    margin-top: 0.5rem;
+  }
+  
+  .quiz-title {
+    font-size: 1.1rem;
+  }
+  
+  .btn-purple {
+    padding: 0.4rem 1rem;
+    font-size: 0.85rem;
+  }
+  
+  .user-ranking-info {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .ranking-item {
+    padding: 0.75rem 1rem;
+  }
+  
+  .position {
+    width: 40px;
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .quiz-card {
+    border-radius: 8px;
+  }
+  
+  .badge.bg-purple {
+    padding: 0.2rem 0.6rem;
+    font-size: 0.8rem;
+  }
+  
+  .search-box input {
+    padding-left: 2rem;
+  }
+  
+  .ranking-container {
+    padding: 1.25rem;
+  }
+  
+  .page-title {
+    font-size: 1.5rem;
+  }
+  
+  .page-title i {
+    font-size: 1.5rem;
+    margin-right: 0.5rem;
+  }
+  
+  .user-score {
+    min-width: 60px;
+    font-size: 1rem;
+  }
+  
+  .btn-purple {
+    padding: 0.5rem 1.25rem;
+    font-size: 0.9rem;
+  }
+}

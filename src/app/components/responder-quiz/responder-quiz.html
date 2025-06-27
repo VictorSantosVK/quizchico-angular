@@ -1,0 +1,75 @@
+<div class="quiz-container">
+  <!-- Cabeçalho -->
+  <header class="quiz-header">
+    <h1 class="quiz-title">Quiz: {{ quizId | titlecase }}</h1>
+    <div *ngIf="score === null && questions.length > 0" class="progress-container">
+      <div class="progress-bar" 
+           [style.width.%]="(currentQuestionIndex + 1) / questions.length * 100">
+        <span class="progress-text">
+          {{ currentQuestionIndex + 1 }}/{{ questions.length }}
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Conteúdo Principal -->
+  <main class="quiz-content">
+    <!-- Tela de Perguntas -->
+    <div *ngIf="score === null && questions.length > 0" class="question-card">
+      <div class="question-header">
+        <h2 class="question-number">Pergunta {{ currentQuestionIndex + 1 }}</h2>
+      </div>
+      <div class="question-body">
+        <p class="question-text">{{ questions[currentQuestionIndex].text }}</p>
+        
+        <div class="options-container">
+          <div *ngFor="let option of questions[currentQuestionIndex].options; let i = index" 
+               class="option" 
+               [class.selected]="userAnswers[currentQuestionIndex] === i"
+               (click)="selectAnswer(i)">
+            <span class="option-letter">{{ getLetter(i) }}</span>
+            <span class="option-text">{{ option }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="question-footer">
+        <button class="btn-next" 
+                (click)="nextQuestion()"
+                [disabled]="userAnswers[currentQuestionIndex] === undefined">
+          {{ currentQuestionIndex < questions.length - 1 ? 'Próxima Pergunta' : 'Ver Resultado' }}
+          <i class="fas fa-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Tela sem perguntas -->
+    <div *ngIf="questions.length === 0" class="empty-quiz">
+      <i class="fas fa-question-circle"></i>
+      <h3>Este quiz ainda não possui perguntas</h3>
+      <a routerLink="/quizzes" class="btn-back">
+        <i class="fas fa-arrow-left"></i> Voltar para os Quizzes
+      </a>
+    </div>
+
+    <!-- Tela de Resultado -->
+    <div *ngIf="score !== null" class="result-card">
+      <div class="result-icon" [class]="getResultClass()">
+        <i [class]="getResultIcon()"></i>
+      </div>
+      <h2 class="result-title">Quiz Concluído!</h2>
+      <div class="result-score">
+        <span class="score-value">{{ score }}%</span>
+        <span class="score-text">de acerto</span>
+      </div>
+      <p class="result-message">{{ getResultMessage() }}</p>
+      <div class="result-actions">
+        <a routerLink="/quizzes" class="btn-back">
+          <i class="fas fa-list"></i> Ver Todos os Quizzes
+        </a>
+        <button class="btn-retry" (click)="resetQuiz()">
+          <i class="fas fa-redo"></i> Tentar Novamente
+        </button>
+      </div>
+    </div>
+  </main>
+</div>
