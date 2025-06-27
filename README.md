@@ -1,65 +1,76 @@
-# MeuPrimeiroApp
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.0.3.
+-----
 
-## Development server
+# Aplicação de Quiz Angular
 
-To start a local development server, run:
+Este projeto é uma aplicação de quiz interativa construída com **Angular**, projetada para oferecer uma experiência de usuário envolvente para a realização de quizzes.
+
+-----
+
+## Configuração do Projeto
+
+Para colocar este projeto em funcionamento em sua máquina local, siga os passos abaixo:
+
+### 1\. Clonar o Repositório
+
+Primeiro, clone o repositório do projeto para sua máquina local usando o Git:
+
+```bash
+git clone https://github.com/VictorSantosVK/quizchico-angular.git
+```
+
+Navegue até o diretório clonado:
+
+```bash
+cd quizchico-angular
+```
+
+### 2\. Requisitos de Versão do Node.js
+
+Este projeto exige uma versão específica do Node.js para funcionar corretamente com o Angular CLI.
+
+  * **Versão do Node.js Necessária:** `v20.19` ou `v22.12` (ou superior nas linhas LTS v20.x ou v22.x)
+
+**Importante:** Se sua versão do Node.js for mais antiga que `v20.19`, você precisará atualizá-la. Você pode usar uma ferramenta como `nvm` (Node Version Manager) para alternar facilmente entre as versões do Node.js.
+
+Para instalar o `nvm`, siga as instruções na [página do GitHub](https://github.com/nvm-sh/nvm). Uma vez que o `nvm` estiver instalado, você pode instalar e usar a versão necessária do Node.js:
+
+```bash
+nvm install 20.19
+nvm use 20.19
+# Ou para v22.12
+# nvm install 22.12
+# nvm use 22.12
+```
+
+Verifique sua versão do Node.js após a atualização:
+
+```bash
+node -v
+```
+
+### 3\. Instalar Dependências
+
+Estando no diretório do projeto e com a versão correta do Node.js, instale os pacotes npm necessários:
+
+```bash
+npm install
+```
+
+### 4\. Rodar a Aplicação
+
+Após instalar as dependências, você pode iniciar o servidor de desenvolvimento Angular:
 
 ```bash
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Este comando irá compilar a aplicação e iniciar um servidor de desenvolvimento local. Você poderá então acessar a aplicação de quiz em seu navegador, geralmente em `http://localhost:4200/`.
 
-## Code scaffolding
+-----
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Tecnologias Utilizadas
 
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
-
-
-## Utilizando spa 
-
-Single page aplication.
-.
+  * **Angular**: Uma plataforma para construir aplicações web para desktop e mobile.
+  * **Node.js**: Ambiente de execução JavaScript.
+  * **npm**: Gerenciador de pacotes para JavaScript.
