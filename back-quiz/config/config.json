@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "root",
+    "password": "dlap1807",
+    "database": "quiz_chico",
+    "host": "localhost",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "root",
+    "password": "dlap1807",
+    "database": "quiz_chico",
+    "host": "localhost",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "root",
+    "password": "dlap1807",
+    "database": "quiz_chico",
+    "host": "localhost",
+    "dialect": "mysql"
+  }
+}
