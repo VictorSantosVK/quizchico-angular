@@ -42,6 +42,7 @@ export class Login {
       next: (res: any) => {
         alert('✅ Login realizado com sucesso!');
         localStorage.setItem('userName', res.user.name);
+        localStorage.setItem('token', res.token); 
         this.router.navigate(['/quizzes']);
       },
       error: (err) => {

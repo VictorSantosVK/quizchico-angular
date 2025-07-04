@@ -52,11 +52,19 @@
   <!-- CONTEÚDO PRINCIPAL -->
   <main class="my-5">
     <!-- Seção de Quizzes Disponíveis -->
-    <section class="conteudo-destaques mb-5  ">
+    <section class="conteudo-destaques mb-5">
       <h2 class="text-center page-title mt-3">Quizzes Disponíveis</h2>
-      
-      
-      <div class="row g-4">
+
+      <!-- Mensagem de carregamento -->
+      <p *ngIf="loadingQuizzes" class="text-center my-4">Carregando quizzes...</p>
+
+      <!-- Mensagem caso não encontre quizzes -->
+      <p *ngIf="!loadingQuizzes && filteredQuizzes.length === 0" class="text-center my-4">
+        Nenhum quiz encontrado.
+      </p>
+
+      <!-- Lista de quizzes -->
+      <div class="row g-4" *ngIf="!loadingQuizzes && filteredQuizzes.length > 0">
         <div class="col-md-4 mb-4" *ngFor="let quiz of filteredQuizzes">
           <div class="card quiz-card h-100">
             <div class="card-body text-center d-flex flex-column">
@@ -64,15 +72,11 @@
               <p class="flex-grow-1">{{ quiz.description || 'Quiz sem descrição' }}</p>
               <div class="quiz-meta">
                 <span class="badge bg-purple">{{ quiz.category || 'Geral' }}</span>
-                <span class="badge bg-secondary ms-2">{{ quiz.questions?.length || 0 }} perguntas</span>
+                <span class="badge bg-secondary ms-2">{{ quiz.questions.length }} perguntas</span>
               </div>
               <a [routerLink]="['/quiz', quiz.id]" class="btn btn-purple mt-3">Iniciar Quiz</a>
             </div>
           </div>
-        </div>
-        
-        <div class="col-12" *ngIf="filteredQuizzes.length === 0">
-          <p class="text-center">Nenhum quiz encontrado.</p>
         </div>
       </div>
     </section>
