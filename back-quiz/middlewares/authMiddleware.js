@@ -1,49 +1,48 @@
-const jwt = require('jsonwebtoken');
 require('dotenv').config();
+const jwt = require('jsonwebtoken');
 
 module.exports = (req, res, next) => {
-  // Verifica se o token está no header ou nos cookies
-  const token = req.headers.authorization?.split(' ')[1] || req.cookies?.token;
+  console.log('[AUTH] Iniciando verificação do token...');
   
+  // 1. Extrair o token
+  const token = req.headers.authorization?.split(' ')[1] || req.cookies?.token;
+  console.log('[AUTH] Token recebido:', token ? `${token.substring(0, 10)}...` : 'Nenhum token');
+
   if (!token) {
-    return res.status(401).json({ 
-      error: 'Acesso não autorizado. Token não fornecido.' 
-    });
+    console.log('[AUTH] Erro: Token não fornecido');
+    return res.status(401).json({ error: 'Token de acesso não fornecido' });
   }
 
-  try {
-    // Verifica o token com a chave secreta do .env
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    
-    // Adiciona as informações do usuário à requisição
+  // 2. Verificar a chave secreta
+  if (!process.env.JWT_SECRET) {
+    console.error('[AUTH] Erro crítico: JWT_SECRET não definido');
+    return res.status(500).json({ error: 'Erro de configuração do servidor' });
+  }
+
+  // 3. Verificar o token
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    if (err) {
+      console.error('[AUTH] Erro na verificação:', err.name);
+      
+      if (err.name === 'TokenExpiredError') {
+        return res.status(401).json({ 
+          error: 'Token expirado',
+          solution: 'Faça login novamente'
+        });
+      }
+      
+      return res.status(401).json({ 
+        error: 'Token inválido',
+        details: process.env.NODE_ENV === 'development' ? err.message : undefined
+      });
+    }
+
+    console.log('[AUTH] Token válido. Payload:', decoded);
     req.user = {
       id: decoded.id,
       email: decoded.email,
-      role: decoded.role || 'user' // Padrão para 'user' se não especificado
+      role: decoded.role || 'user'
     };
-    
     next();
-  } catch (error) {
-    console.error('Erro na verificação do token:', error);
-    
-    // Respostas específicas para diferentes tipos de erro
-    if (error.name === 'JsonWebTokenError') {
-      return res.status(403).json({ 
-        error: 'Token inválido',
-        details: process.env.NODE_ENV === 'development' ? error.message : undefined
-      });
-    }
-    
-    if (error.name === 'TokenExpiredError') {
-      return res.status(403).json({ 
-        error: 'Token expirado',
-        solution: 'Por favor, faça login novamente'
-      });
-    }
-    
-    res.status(500).json({ 
-      error: 'Erro na autenticação',
-      details: process.env.NODE_ENV === 'development' ? error.message : undefined
-    });
-  }
+  });
 };

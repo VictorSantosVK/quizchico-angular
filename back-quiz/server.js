@@ -1,9 +1,15 @@
+require('dotenv').config();
+console.log('Variáveis de ambiente carregadas:', {
+  PORT: process.env.PORT,
+  JWT_SECRET: process.env.JWT_SECRET ? '*** (presente)' : 'NÃO DEFINIDO',
+  JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN
+});
 const express = require("express");
 const cors = require("cors");
 const { sequelize } = require("./models");
 const path = require("path");
 const app = express();
-require("dotenv").config();
+
 
 // Servir public normalmente
 app.use(express.static(path.join(__dirname, "front-quiz/public")));

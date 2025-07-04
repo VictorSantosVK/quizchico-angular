@@ -1,80 +1,90 @@
-import { Component, OnInit , ViewEncapsulation} from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit, ViewEncapsulation, ChangeDetectorRef } from '@angular/core';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
+
+interface Question {
+  id: number;
+  text: string;
+  options: string[];
+  correctOption: number;
+  explanation?: string;
+  quizId: number;
+}
+
+interface QuizDetails {
+  id: number;
+  title: string;
+  description: string;
+}
 
 @Component({
   selector: 'app-responder-quiz',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
-    styleUrls: ['./responder-quiz.css'],
+  imports: [CommonModule, RouterModule, FormsModule, HttpClientModule],
+  styleUrls: ['./responder-quiz.css'],
   templateUrl: './responder-quiz.html',
-   encapsulation: ViewEncapsulation.None
-
+  encapsulation: ViewEncapsulation.None
 })
 export class ResponderQuiz implements OnInit {
   quizId: string = '';
-  questions: any[] = [];
+  quizTitle: string = '';
+  questions: Question[] = [];
   currentQuestionIndex: number = 0;
   userAnswers: number[] = [];
   score: number | null = null;
+  loading: boolean = true;
+  error: string | null = null;
+  showExplanations: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private http: HttpClient,
+    private cdr: ChangeDetectorRef // <--- INJEÇÃO AQUI
   ) {}
 
   ngOnInit(): void {
     this.quizId = this.route.snapshot.params['id'];
-    this.questions = this.getMockedQuestions(this.quizId);
+    this.loadQuizData();
   }
 
-  getMockedQuestions(quizId: string): any[] {
-    const mockData: any = {
-      'historia-brasil': [
-        {
-          text: 'Quem foi o primeiro presidente do Brasil?',
-          options: ['Dom Pedro I', 'Deodoro da Fonseca', 'Getúlio Vargas', 'Juscelino Kubitschek'],
-          correctAnswer: 1
-        },
-        {
-          text: 'Em que ano ocorreu a Proclamação da República?',
-          options: ['1889', '1822', '1500', '1964'],
-          correctAnswer: 0
-        }
-      ],
-      'matematica-basica': [
-        {
-          text: 'Quanto é 7 + 3?',
-          options: ['9', '10', '11', '13'],
-          correctAnswer: 1
-        },
-        {
-          text: 'Qual o resultado de 6 × 7?',
-          options: ['42', '36', '48', '40'],
-          correctAnswer: 0
-        }
-      ],
-      'ciencias-naturais': [
-        {
-          text: 'Qual planeta é conhecido como planeta vermelho?',
-          options: ['Terra', 'Marte', 'Júpiter', 'Vênus'],
-          correctAnswer: 1
-        },
-        {
-          text: 'A água ferve a que temperatura?',
-          options: ['90°C', '80°C', '100°C', '110°C'],
-          correctAnswer: 2
-        }
-      ]
-    };
+  async loadQuizData() {
+    try {
+      this.loading = true;
+      this.error = null;
 
-    return mockData[quizId] || [];
+      const [quiz, questions] = await Promise.all([
+        firstValueFrom(this.http.get<QuizDetails>(`http://localhost:3001/api/quizzes/${this.quizId}`)),
+        firstValueFrom(this.http.get<Question[]>(`http://localhost:3001/api/questions/${this.quizId}`))
+      ]);
+
+      if (!quiz || !questions) {
+        throw new Error('Dados do quiz não encontrados');
+      }
+
+      this.quizTitle = quiz.title;
+      this.questions = questions.map(q => ({
+        ...q,
+        options: q.options || []
+      }));
+    } catch (err: any) {
+      console.error('Erro ao carregar quiz:', err);
+      this.error = err.message || 'Erro ao carregar o quiz';
+
+      if (err?.status === 404) {
+        setTimeout(() => this.router.navigate(['/quizzes']), 3000);
+      }
+    } finally {
+      this.loading = false;
+      this.cdr.detectChanges(); // <--- FORÇA ATUALIZAÇÃO DA UI
+    }
   }
 
   getLetter(index: number): string {
-    return String.fromCharCode(65 + index); // A, B, C, D...
+    return String.fromCharCode(65 + index);
   }
 
   selectAnswer(index: number) {
@@ -86,43 +96,79 @@ export class ResponderQuiz implements OnInit {
       this.currentQuestionIndex++;
     } else {
       this.calculateScore();
+      this.saveQuizResult();
     }
   }
 
-  calculateScore() {
-    let correct = 0;
-    this.questions.forEach((q, i) => {
-      if (this.userAnswers[i] === q.correctAnswer) {
-        correct++;
-      }
-    });
-    this.score = Math.round((correct / this.questions.length) * 100);
+calculateScore() {
+  const correct = this.questions.reduce((acc, q, i) => {
+    const userAnswerIndex = this.userAnswers[i];
+
+    if (
+      userAnswerIndex === undefined ||
+      userAnswerIndex < 0 ||
+      userAnswerIndex >= q.options.length
+    ) {
+      return acc; // resposta inválida ou não respondida
+    }
+
+    const selectedOption = q.options[userAnswerIndex];
+    const correctOption = q.correctOption;
+
+    // Força ambos para string pra garantir a comparação
+    return acc + (String(selectedOption) === String(correctOption) ? 1 : 0);
+  }, 0);
+
+  this.score = Math.round((correct / this.questions.length) * 100);
+}
+
+  async saveQuizResult() {
+    const token = localStorage.getItem('token');
+    if (!token || this.score === null) return;
+
+    try {
+      await firstValueFrom(
+        this.http.post('http://localhost:3001/api/user-quiz', {
+          quizId: this.quizId,
+          score: this.score
+        }, {
+          headers: { Authorization: `Bearer ${token}` }
+        })
+      );
+    } catch (err) {
+      console.error('Erro ao salvar resultado:', err);
+    }
   }
 
   resetQuiz() {
     this.currentQuestionIndex = 0;
     this.userAnswers = [];
     this.score = null;
+    this.showExplanations = false;
   }
 
   getResultClass(): string {
-    if (!this.score) return '';
+    if (this.score === null) return '';
     if (this.score >= 70) return 'excellent';
     if (this.score >= 40) return 'good';
     return 'poor';
   }
 
   getResultIcon(): string {
-    if (!this.score) return 'fas fa-question';
+    if (this.score === null) return 'fas fa-question';
     if (this.score >= 70) return 'fas fa-trophy';
     if (this.score >= 40) return 'fas fa-smile';
     return 'fas fa-frown';
   }
 
   getResultMessage(): string {
-    if (!this.score) return '';
-    if (this.score >= 70) return 'Excelente desempenho! Você domina este assunto.';
-    if (this.score >= 40) return 'Bom trabalho! Com um pouco mais de estudo você melhora ainda mais.';
-    return 'Continue praticando! Revise o conteúdo e tente novamente.';
+    if (this.score === null) return '';
+    if (this.score >= 70) return 'Excelente desempenho!';
+    if (this.score >= 40) return 'Bom trabalho!';
+    return 'Continue praticando!';
+  }
+
+  toggleExplanations() {
+    this.showExplanations = !this.showExplanations;
   }
 }

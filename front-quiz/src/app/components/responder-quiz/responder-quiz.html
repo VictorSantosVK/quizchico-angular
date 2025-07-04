@@ -1,8 +1,19 @@
 <div class="quiz-container">
   <!-- Cabeçalho -->
   <header class="quiz-header">
-    <h1 class="quiz-title">Quiz: {{ quizId | titlecase }}</h1>
-    <div *ngIf="score === null && questions.length > 0" class="progress-container">
+    <h1 class="quiz-title">Quiz: {{ quizTitle }}</h1>
+    
+    <!-- Mensagens de status -->
+    <div *ngIf="loading" class="loading-message">
+      <i class="fas fa-spinner fa-spin"></i> Carregando quiz...
+    </div>
+    
+    <div *ngIf="error" class="error-message">
+      <i class="fas fa-exclamation-triangle"></i> {{ error }}
+      <button (click)="loadQuizData()" class="btn-retry">Tentar novamente</button>
+    </div>
+
+    <div *ngIf="!loading && !error && score === null && questions.length > 0" class="progress-container">
       <div class="progress-bar" 
            [style.width.%]="(currentQuestionIndex + 1) / questions.length * 100">
         <span class="progress-text">
@@ -14,8 +25,15 @@
 
   <!-- Conteúdo Principal -->
   <main class="quiz-content">
+    <!-- Tela de Carregamento -->
+    <div *ngIf="loading" class="loading-content">
+      <div class="spinner-border text-purple" role="status">
+        <span class="visually-hidden">Carregando...</span>
+      </div>
+    </div>
+
     <!-- Tela de Perguntas -->
-    <div *ngIf="score === null && questions.length > 0" class="question-card">
+    <div *ngIf="!loading && !error && score === null && questions.length > 0" class="question-card">
       <div class="question-header">
         <h2 class="question-number">Pergunta {{ currentQuestionIndex + 1 }}</h2>
       </div>
@@ -43,7 +61,7 @@
     </div>
 
     <!-- Tela sem perguntas -->
-    <div *ngIf="questions.length === 0" class="empty-quiz">
+    <div *ngIf="!loading && !error && questions.length === 0" class="empty-quiz">
       <i class="fas fa-question-circle"></i>
       <h3>Este quiz ainda não possui perguntas</h3>
       <a routerLink="/quizzes" class="btn-back">
@@ -52,7 +70,7 @@
     </div>
 
     <!-- Tela de Resultado -->
-    <div *ngIf="score !== null" class="result-card">
+    <div *ngIf="!loading && !error && score !== null" class="result-card">
       <div class="result-icon" [class]="getResultClass()">
         <i [class]="getResultIcon()"></i>
       </div>
