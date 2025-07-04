@@ -1,70 +1,88 @@
+# 🧠 Quiz Chico - Projeto de Quizzes Interativos
+### 📋 Visão Geral
+O Quiz Chico é uma plataforma web para criação e realização de quizzes implementador com:
 
+- Frontend em Angular
 
-# Aplicação de Quiz Angular
+- Backend em Node.js com Express
 
-Este projeto é uma aplicação de quiz interativa construída com **Angular**, projetada para oferecer uma experiência de usuário envolvente para a realização de quizzes.
+- Banco de dados mysql com Sequelize ORM
 
------
+## 🚀 Como Executar o Projeto Localmente
 
-## Configuração do Projeto
+### 📋 Pré-requisitos
 
-Para colocar este projeto em funcionamento em sua máquina local, siga os passos abaixo:
+Antes de iniciar, certifique-se de ter instalado:
 
-### 1\. Clonar o Repositório
+- Node.js (versão recomendada: 18 ou superior)
+- MySQL 8.4 (LTS)
+- Angular 19 ou superior
 
-Primeiro, clone o repositório do projeto para sua máquina local usando o Git:
+### 📋 Instalação
 
-```bash
-git clone https://github.com/VictorSantosVK/quizchico-angular.git
+#### 🔧 Configuração do Banco de Dados
+
+1. Crie um banco de dados no MySQL.
+
+2. Acesse o arquivo de configuração:
+
+```sh
+back-quiz/config/config.json
 ```
 
-Navegue até o diretório clonado:
+3. Altere os dados de conexão (username, password, database) para os dados do seu banco de dados.
 
-```bash
-cd quizchico-angular
+#### 🔑 Configuração de Variáveis de Ambiente
+
+1. Crie um arquivo .env dentro da pasta back-quiz/.
+
+2. Adicione as seguintes variáveis:
+```sh
+PORT=3001
+JWT_SECRET=meujwtsecret
+JWT_EXPIRES_IN=1d
 ```
-
-### 2\. Requisitos de Versão do Node.js
-
-Este projeto exige uma versão específica do Node.js para funcionar corretamente com o Angular CLI.
-
-  * **Versão do Node.js Atualmente Detectada:** `v20.10.0`
-  * **Versão do Node.js Necessária:** `v20.19` ou `v22.12` (ou superior nas linhas LTS v20.x ou v22.x)
-
-**Importante:** Se sua versão do Node.js for mais antiga que `v20.19`, você precisará atualizá-la. Você pode baixar a versão mais recente diretamente do [site oficial do Node.js](https://www.google.com/search?q=https://nodejs.org/pt-br/download/). Certifique-se de instalar uma das versões recomendadas (v20.19+ ou v22.12+).
-
-Após a instalação ou atualização, verifique sua versão do Node.js:
-
-```bash
-node -v
-```
-
-### 3\. Instalar Dependências
-
-Estando no diretório do projeto e com a versão correta do Node.js, instale os pacotes npm necessários:
-
-```bash
+#### 📦 Instalação as dependências do backend
+```sh
+cd back-quiz
 npm install
 ```
-
-### 4\. Rodar a Aplicação
-
-Após instalar as dependências, você pode iniciar o servidor de desenvolvimento Angular:
-
-```bash
+#### ▶️ Executar o Backend
+```sh
+npm run start
+```
+#### 🎨 Executar o Frontend
+#### 📦 Instalação as dependências do backend
+```sh
+cd front-quiz
+npm install
+```
+#### ▶️ Executar o Frontend
+```sh
 ng serve
 ```
 
-Este comando irá compilar a aplicação e iniciar um servidor de desenvolvimento local. Você poderá então acessar a aplicação de quiz em seu navegador, geralmente em `http://localhost:4200/`.
 
+## 🌟 Funcionalidades 
 
+### Usuário 
+🔹 RF01: Cadastrar-se no sistema (nome, e-mail e senha)
 
------
+🔹 RF02: Fazer login e logout
 
-## Tecnologias Utilizadas
+🔹 RF03: Visualizar a lista de quizzes disponíveis
 
-  * **Angular**: Uma plataforma para construir aplicações web para desktop e mobile.
-  * **Node.js**: Ambiente de execução JavaScript.
-  * **npm**: Gerenciador de pacotes para JavaScript.
+🔹 RF04: Responder quizzes (múltipla escolha)
 
------
+🔹 RF05: Ver resultado imediato após concluir o quiz
+
+🔹 RF06: Acessar histórico de quizzes realizados e média de desempenho
+
+### Usuário Administrador
+🔸 RF07: Login de administrador
+
+🔸 RF08: Criar, editar e excluir quizzes
+
+🔸 RF09: Criar, editar e excluir questões
+
+🔸 RF10: Associar questões aos quizzes
