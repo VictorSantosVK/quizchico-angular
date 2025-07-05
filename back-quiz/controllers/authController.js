@@ -104,6 +104,35 @@ const login = async (req, res) => {
     });
   }
 };
+const loginMockAdmin = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (email === 'admin@gmail.com' && password === '123') {
+      const token = jwt.sign(
+        { id: 0, role: 'admin', email },
+        process.env.JWT_SECRET,
+        { expiresIn: process.env.JWT_EXPIRES_IN || '1d' }
+      );
+
+      return res.json({
+        token,
+        user: {
+          id: 0,
+          name: 'Admin',
+          email,
+          role: 'admin'
+        }
+      });
+    }
+
+    return res.status(401).json({ error: 'Credenciais inválidas para admin mockado' });
+  } catch (err) {
+    console.error('Erro no loginMockAdmin:', err);
+    return res.status(500).json({ error: 'Erro interno no login de admin' });
+  }
+};
+
 
 const getUser = async (req, res) => {
   try {
@@ -130,5 +159,6 @@ const getUser = async (req, res) => {
 module.exports = {
   register,
   login,
-  getUser
+  getUser,
+  loginMockAdmin
 };

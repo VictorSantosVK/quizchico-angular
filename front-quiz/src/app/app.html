@@ -1,3 +1,4 @@
 <app-home></app-home>
 <a routerLink="/ranking">Ver Ranking</a>
+<a *ngIf="isAdmin()" routerLink="/admin">Admin</a>
 <router-outlet></router-outlet>

@@ -15,6 +15,11 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/login`, dados);
   }
 
+loginAdmin(data: { email: string; password: string }): Observable<any> {
+  return this.http.post(`${this.apiUrl}/admin`, data);
+}
+
+
   // Registro: envia nome, email e senha para o backend
   register(dados: {
     name: string;

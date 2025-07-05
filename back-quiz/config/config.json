@@ -1,21 +1,21 @@
 {
   "development": {
     "username": "root",
-    "password": "dlap1807",
+    "password": "!FPEads@2023",
     "database": "quiz_chico",
     "host": "localhost",
     "dialect": "mysql"
   },
   "test": {
     "username": "root",
-    "password": "dlap1807",
+    "password": "!FPEads@2023",
     "database": "quiz_chico",
     "host": "localhost",
     "dialect": "mysql"
   },
   "production": {
     "username": "root",
-    "password": "dlap1807",
+    "password": "!FPEads@2023",
     "database": "quiz_chico",
     "host": "localhost",
     "dialect": "mysql"

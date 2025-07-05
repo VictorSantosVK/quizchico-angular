@@ -265,6 +265,26 @@ onQuestionTypeChange(question: Question) {
     // Implementar lógica de logout
     console.log('Usuário deslogado');
   }
+ngOnInit() {
+  const userData = localStorage.getItem('user');
+
+  if (!userData) {
+    alert('Você precisa estar logado como administrador.');
+    this.redirectAway();
+    return;
+  }
+
+  const parsedUser = JSON.parse(userData);
+
+  if (parsedUser.role !== 'admin') {
+    alert('Acesso restrito. Você não é administrador.');
+    this.redirectAway();
+  }
+}
+
+redirectAway() {
+  window.location.href = '/'; // Redireciona para home, login ou onde quiser
+}
 
   // Helper para type guarding
   isMultipleChoiceQuestion(question: Question): question is MultipleChoiceQuestion {

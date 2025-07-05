@@ -10,7 +10,11 @@ router.post("/register", authController.register);
 
 // ✅ Login de usuário
 router.post("/login", authController.login);
-
+// ✅ Login mockado apenas para admin
+router.post("/admin", (req, res, next) => {
+  console.log("Rota /admin chamada"); // 👈 Verifique no terminal do servidor
+  authController.loginMockAdmin(req, res, next);
+});
 // ✅ GET todos os usuários (remova se quiser proteger depois)
 router.get("/usuarios", async (req, res, next) => {
   try {

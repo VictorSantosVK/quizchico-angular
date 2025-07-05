@@ -11,4 +11,14 @@ import { RouterOutlet } from '@angular/router';
 })
 export class App {
   protected title = 'meu-primeiro-app';
+
+
+isAdmin(): boolean {
+  const user = JSON.parse(localStorage.getItem('user')!);
+  return user?.role === 'admin';
 }
+
+
+}
+
+

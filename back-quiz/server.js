@@ -2,13 +2,10 @@ const express = require("express");
 const cors = require("cors");
 const { sequelize } = require("./models");
 const path = require("path");
-const app = express();
 require("dotenv").config();
 
 // Servir public normalmente
-app.use(express.static(path.join(__dirname, "front-quiz/public")));
 // Servir a pasta 'admin' separadamente
-app.use("/admin", express.static(path.join(__dirname, "front-quiz/admin")));
 class AppServer {
   constructor() {
     this.app = express();
@@ -22,7 +19,10 @@ class AppServer {
   }
 
   initializeMiddlewares() {
-    // Configuração básica de CORS
+// Servir public normalmente
+this.app.use(express.static(path.join(__dirname, "front-quiz/public")));
+// Servir a pasta 'admin' separadamente
+this.app.use("/admin", express.static(path.join(__dirname, "front-quiz/admin")));
     this.app.use(
       cors({
         origin: process.env.CORS_ORIGIN || "*",

@@ -33,22 +33,30 @@ export class Login {
   }
 
   onLoginSubmit(): void {
-    if (!this.loginData.email || !this.loginData.password) {
-      alert('⚠️ Por favor, preencha todos os campos!');
-      return;
-    }
-
-    this.authService.login(this.loginData).subscribe({
-      next: (res: any) => {
-        alert('✅ Login realizado com sucesso!');
-        localStorage.setItem('userName', res.user.name);
-        this.router.navigate(['/quizzes']);
-      },
-      error: (err) => {
-        alert(err.error?.error || 'Erro ao fazer login');
-      },
-    });
+  if (!this.loginData.email || !this.loginData.password) {
+    alert('⚠️ Por favor, preencha todos os campos!');
+    return;
   }
+
+  const isAdminMock = this.loginData.email === 'admin@gmail.com';
+
+  const loginObservable = isAdminMock
+    ? this.authService.loginAdmin(this.loginData)
+    : this.authService.login(this.loginData);
+
+  loginObservable.subscribe({
+    next: (res: any) => {
+      alert('✅ Login realizado com sucesso!');
+      localStorage.setItem('user', JSON.stringify(res.user)); // Salva user com role
+      localStorage.setItem('token', res.token); // Salva token para futuras requisições
+      this.router.navigate(['/quizzes']);
+    },
+    error: (err) => {
+      alert(err.error?.error || 'Erro ao fazer login');
+    },
+  });
+}
+
 
 onRegisterSubmit(): void {
   if (
